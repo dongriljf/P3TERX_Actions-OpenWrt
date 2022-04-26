@@ -70,7 +70,6 @@ jobs:
 
     - name: Update feeds
       run:  |
-        make dirclean
         cd openwrt && ./scripts/feeds update -a
 
     - name: Install feeds

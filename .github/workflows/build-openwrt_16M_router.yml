@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build OpenWrt 8M FLASH router
+name: Build OpenWrt 16M FLASH router
 
 on:
   repository_dispatch:

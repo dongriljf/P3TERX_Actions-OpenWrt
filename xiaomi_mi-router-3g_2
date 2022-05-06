@@ -118,8 +118,8 @@ CONFIG_PACKAGE_luci-ssl-openssl=y
 
 
 # Ö÷Ìâ°ü
-CONFIG_PACKAGE_luci-theme-argonne=y
-CONFIG_PACKAGE_luci-app-argonne-config=y
+# CONFIG_PACKAGE_luci-theme-argonne is not set
+# CONFIG_PACKAGE_luci-app-argonne-config is not set
 
 # Other Appliciations
 # CONFIG_PACKAGE_usign is not set

@@ -2,6 +2,10 @@ CONFIG_TARGET_ipq40xx=y
 CONFIG_TARGET_ipq40xx_DEVICE_mobipromo_cm520-79f=y
 CONFIG_TARGET_BOARD="ipq40xx"
 
+CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ=y
+CONFIG_TARGET_SQUASHFS_BLOCK_SIZE=1024
+# CONFIG_SIGNATURE_CHECK is not set
+# CONFIG_SIGNED_PACKAGES is not set
 
 # IPv6 Ö§³Ö
 CONFIG_IPV6=y
@@ -39,11 +43,11 @@ CONFIG_PACKAGE_luci-app-vsftpd=y
 # LUCI Appliciations
 
 
-CONFIG_PACKAGE_luci-app-advanced=y
-CONFIG_PACKAGE_luci-app-advanced-reboot=y
-CONFIG_PACKAGE_luci-app-aliyundrive-fuse=y
 
-CONFIG_PACKAGE_luci-app-amule=y
+
+CONFIG_PACKAGE_luci-app-aliyundrive-webdav=y
+
+
 CONFIG_PACKAGE_luci-app-aria2=y
 
 CONFIG_PACKAGE_luci-app-dawn=y
@@ -60,7 +64,7 @@ CONFIG_PACKAGE_luci-app-frpc=y
 
 
 CONFIG_PACKAGE_luci-app-hd-idle=y
-CONFIG_PACKAGE_luci-app-hnet=y
+
 
 CONFIG_PACKAGE_luci-app-mwan3=y
 CONFIG_PACKAGE_luci-app-mwan3helper=y
@@ -149,9 +153,7 @@ CONFIG_PACKAGE_luci-ssl-openssl=y
 # CONFIG_PACKAGE_usign is not set
 # CONFIG_PACKAGE_vlmcsd is not set
 
-CONFIG_TARGET_SQUASHFS_BLOCK_SIZE=1024
-# CONFIG_SIGNATURE_CHECK is not set
-# CONFIG_SIGNED_PACKAGES is not set
+
 
 
  

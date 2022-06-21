@@ -77,6 +77,7 @@ jobs:
     - name: Load custom configuration
       run: |
         \cp -f mt7621_zte_e8820s_ext.dts openwrt/target/linux/ramips/dts/mt7621_zte_e8820s.dts
+        \cp -f mt7621.mk openwrt/target/linux/ramips/image/mt7621.mk
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_P2_SH

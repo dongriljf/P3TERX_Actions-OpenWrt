@@ -2,6 +2,8 @@ CONFIG_TARGET_ramips=y
 CONFIG_TARGET_ramips_mt7621=y
 CONFIG_TARGET_ramips_mt7621_DEVICE_zte_e8820s=y
 
+# CONFIG_TARGET_INITRAMFS_COMPRESSION_LZMA is not set
+CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ=y
 # ¿ªÔ´Çý¶¯
 CONFIG_PACKAGE_kmod-mt76=y
 CONFIG_PACKAGE_kmod-mt76-core=y
@@ -48,23 +50,16 @@ CONFIG_PACKAGE_luci-app-aria2=y
 CONFIG_PACKAGE_luci-app-frpc=y
 CONFIG_PACKAGE_luci-app-hd-idle=y
 CONFIG_PACKAGE_luci-app-ipsec-vpnd=y
-
 CONFIG_PACKAGE_luci-app-openclash=y
-
 CONFIG_PACKAGE_luci-app-serverchan=y
-
 CONFIG_PACKAGE_luci-app-sqm=y
-
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_Plugin=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
 CONFIG_PACKAGE_luci-app-syncdial=y
-
 CONFIG_PACKAGE_luci-app-transmission=y
-
 CONFIG_PACKAGE_luci-app-webadmin=y
 CONFIG_PACKAGE_luci-app-wireguard=y
-
 CONFIG_PACKAGE_luci-ssl-openssl=y
 # CONFIG_PACKAGE_luci-app-ipsec-server is not set
 # CONFIG_PACKAGE_luci-app-adguardhome_INCLUDE_binary is not set

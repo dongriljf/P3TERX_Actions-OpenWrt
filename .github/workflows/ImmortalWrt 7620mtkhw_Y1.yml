@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: 7621mtkhw_newifi-d2
+name: 7620mtkhw_Y1
 
 on:
   repository_dispatch:

@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: ImmortalWrt 18.06-k5.4_newifi-d2
+name: ImmortalWrt_18.06_k5.4_newifi-d2
 
 on:
   repository_dispatch:
@@ -23,7 +23,7 @@ env:
   REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-18.06-k5.4
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: d-team_newifi-d2
+  CONFIG_FILE: immortalwrt_newifi_d2
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -61,10 +61,9 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
     - name: Load custom feeds
       run: |
-        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x $DIY_P1_SH
-        cd openwrt
-        $GITHUB_WORKSPACE/$DIY_P1_SH
+        cd openwrt 
+        echo "src-git passwall2 https://github.com/xiaorouji/openwrt-passwall2.git;main" >> "feeds.conf.default"
+        echo "src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git;main" >> "feeds.conf.default"
     - name: Update feeds
       run:  |
         cd openwrt && ./scripts/feeds update -a

@@ -472,3 +472,7 @@ CONFIG_boost-runtime-shared=y
 CONFIG_boost-static-and-shared-libs=y
 CONFIG_boost-variant-release=y
 CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_IPT2Socks=y
+CONFIG_TARGET_SQUASHFS_BLOCK_SIZE=1024
+CONFIG_TARGET_INITRAMFS_COMPRESSION_XZ=y
+# CONFIG_SIGNATURE_CHECK is not set
+# CONFIG_SIGNED_PACKAGES is not set

@@ -1,0 +1,375 @@
+From 680eba254e33df4b513f750b0e92a298da087461 Mon Sep 17 00:00:00 2001
+From: dsanke
+Date: Sun, 14 May 2023 21:48:27 +0800
+Subject: [PATCH] ZTE E8820S and Newifi D2 modification.
+
+---
+ package/kernel/mt-drivers/mt7603e/config.in   |   2 +-
+ .../ramips/dts/mt7621_d-team_newifi-d2.dts    |  15 +-
+ target/linux/ramips/dts/mt7621_zte_e8820s.dts | 196 ++++++++++++++++++
+ target/linux/ramips/image/mt7621.mk           |  21 +-
+ .../mt7621/base-files/etc/board.d/01_leds     |   3 +
+ .../mt7621/base-files/etc/board.d/02_network  |   9 +-
+ .../mt7621/base-files/lib/upgrade/platform.sh |   1 +
+ 7 files changed, 235 insertions(+), 12 deletions(-)
+ create mode 100644 target/linux/ramips/dts/mt7621_zte_e8820s.dts
+
+diff --git a/package/kernel/mt-drivers/mt7603e/config.in b/package/kernel/mt-drivers/mt7603e/config.in
+index 634c9bf..b14816f 100644
+--- a/package/kernel/mt-drivers/mt7603e/config.in
++++ b/package/kernel/mt-drivers/mt7603e/config.in
+@@ -177,7 +177,7 @@ config MT7603E_RTMP_FLASH_SUPPORT
+ config MT7603E_LED_CONTROL_SUPPORT
+ 	bool "LED Support"
+ #    depends on WIFI_DRIVER
+-	default n
++	default y
+ 
+ config MT7603E_SINGLE_SKU
+ 	bool "Single SKU"
+diff --git a/target/linux/ramips/dts/mt7621_d-team_newifi-d2.dts b/target/linux/ramips/dts/mt7621_d-team_newifi-d2.dts
+index 95cab41..f190ccf 100755
+--- a/target/linux/ramips/dts/mt7621_d-team_newifi-d2.dts
++++ b/target/linux/ramips/dts/mt7621_d-team_newifi-d2.dts
+@@ -134,7 +134,7 @@
+ };
+ 
+ &pcie0 {
+-	mt76@0,0 {
++	wifi@0,0 {
+ 		reg = <0x0000 0 0 0 0>;
+ 		mediatek,mtd-eeprom = <&factory 0x8000>;
+ 		ieee80211-freq-limit = <5000000 6000000>;
+@@ -142,9 +142,10 @@
+ };
+ 
+ &pcie1 {
+-	mt76@0,0 {
++	wifi@0,0 {
+ 		reg = <0x0000 0 0 0 0>;
+ 		mediatek,mtd-eeprom = <&factory 0x0000>;
++		ieee80211-freq-limit = <2400000 2500000>;
+ 	};
+ };
+ 
+@@ -164,12 +165,12 @@
+ };
+ 
+ &hnat {
+-        mtketh-wan = "eth0.2";
+-        mtketh-ppd = "eth0.1";
+-        mtketh-lan = "eth0";
++	mtketh-wan = "eth1";
++	mtketh-ppd = "eth0";
++	mtketh-lan = "eth0";
+ 	ext-devices = "wlan0","wlan1","rax0","ra0", "rai0","apclii0","apclix0", "apcli0";
+-        mtketh-max-gmac = <1>;
+-        status = "okay";
++	mtketh-max-gmac = <2>;
++	status = "okay";
+ };
+ 
+ &gsw {
+diff --git a/target/linux/ramips/dts/mt7621_zte_e8820s.dts b/target/linux/ramips/dts/mt7621_zte_e8820s.dts
+new file mode 100644
+index 0000000..16c3b46
+--- /dev/null
++++ b/target/linux/ramips/dts/mt7621_zte_e8820s.dts
+@@ -0,0 +1,196 @@
++#include "mt7621.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++
++/ {
++	compatible = "zte,e8820s", "mediatek,mt7621-soc";
++	model = "ZTE E8820S";
++
++	aliases {
++		led-boot = &led_power;
++		led-failsafe = &led_power;
++		led-running = &led_power;
++		led-upgrade = &led_power;
++		label-mac-device = &gmac0;
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200";
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led_sys: sys {
++			label = "white:sys";
++			gpios = <&gpio 3 GPIO_ACTIVE_LOW>;
++		};
++
++		led_power: power {
++			label = "white:power";
++			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
++		};
++
++	};
++
++	keys {
++		compatible = "gpio-keys";
++
++		reset {
++			label = "reset";
++			gpios = <&gpio 18 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_RESTART>;
++		};
++
++		wps {
++			label = "wps";
++			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_WPS_BUTTON>;
++		};
++
++		wifi {
++			label = "wifi";
++			gpios = <&gpio 10 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_RFKILL>;
++		};
++	};
++};
++
++&nand {
++	status = "okay";
++
++	partitions {
++		compatible = "fixed-partitions";
++		#address-cells = <1>;
++		#size-cells = <1>;
++
++		partition@0 {
++			label = "u-boot";
++			reg = <0x0 0x80000>;
++			read-only;
++		};
++
++		partition@80000 {
++			label = "u-boot-env";
++			reg = <0x80000 0x80000>;
++			read-only;
++		};
++
++		factory: partition@100000 {
++			label = "factory";
++			reg = <0x100000 0x40000>;
++			read-only;
++		};
++
++		partition@140000 {
++			label = "kernel";
++			reg = <0x140000 0x400000>;
++		};
++
++		partition@540000 {
++			label = "ubi";
++			reg = <0x540000 0x7a40000>;
++		};
++
++		/*
++		 * Leave 512 KiB for the bad block table
++		 */
++	};
++};
++
++&pcie {
++	status = "okay";
++};
++
++&pcie0 {
++	wifi@0,0 {
++		reg = <0x0000 0 0 0 0>;
++		mediatek,mtd-eeprom = <&factory 0x0000>;
++		ieee80211-freq-limit = <2400000 2500000>;
++	};
++};
++
++&pcie1 {
++	wifi@0,0 {
++		reg = <0x0000 0 0 0 0>;
++		mediatek,mtd-eeprom = <&factory 0x8000>;
++		ieee80211-freq-limit = <5000000 6000000>;
++	};
++};
++
++&gmac0 {
++	nvmem-cells = <&macaddr_factory_e000>;
++	nvmem-cell-names = "mac-address";
++};
++
++&gmac1 {
++	nvmem-cells = <&macaddr_factory_e000>;
++	nvmem-cell-names = "mac-address";
++};
++
++&switch0 {
++	/* must delete compatible property */
++	/delete-property/ compatible;
++};
++
++&hnat {
++	mtketh-wan = "eth1";
++	mtketh-ppd = "eth0";
++	mtketh-lan = "eth0";
++	ext-devices = "wlan0","wlan1","rax0","ra0", "rai0","apclii0","apclix0", "apcli0";
++	mtketh-max-gmac = <2>;
++	status = "okay";
++};
++
++&gsw {
++	mediatek,mdio = <&mdio>;
++	mediatek,portmap = "llllw";
++	mediatek,mcm;
++	mt7530,direct-phy-access;
++
++	resets = <&rstctrl 2>;
++	reset-names = "mcm";
++
++	port5: port@5 {
++		compatible = "mediatek,mt753x-port";
++		reg = <5>;
++		phy-mode = "rgmii";
++		fixed-link {
++			speed = <1000>;
++			full-duplex;
++		};
++	};
++
++	port6: port@6 {
++		compatible = "mediatek,mt753x-port";
++		reg = <6>;
++		phy-mode = "rgmii";
++		fixed-link {
++			speed = <1000>;
++			full-duplex;
++		};
++	};
++
++	mdio-bus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++	};
++};
++
++&state_default {
++	gpio {
++		groups = "jtag", "uart2", "uart3", "wdt";
++		function = "gpio";
++	};
++};
++
++&factory {
++	compatible = "nvmem-cells";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	macaddr_factory_e000: macaddr@e000 {
++		reg = <0xe000 0x6>;
++	};
++};
+diff --git a/target/linux/ramips/image/mt7621.mk b/target/linux/ramips/image/mt7621.mk
+index ec97482..867dcdf 100755
+--- a/target/linux/ramips/image/mt7621.mk
++++ b/target/linux/ramips/image/mt7621.mk
+@@ -475,13 +475,12 @@ endef
+ TARGET_DEVICES += dual-q_h721
+ 
+ define Device/d-team_newifi-d2
+-  $(Device/dsa-migration)
+   $(Device/uimage-lzma-loader)
+   IMAGE_SIZE := 32448k
+   DEVICE_VENDOR := Newifi
+   DEVICE_MODEL := D2
+   DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb3 \
+-	kmod-usb-ledtrig-usbport luci-app-mtwifi 
++	kmod-usb-ledtrig-usbport luci-app-mtwifi
+ endef
+ TARGET_DEVICES += d-team_newifi-d2
+ 
+@@ -2125,6 +2124,24 @@ define Device/zio_freezio
+ endef
+ TARGET_DEVICES += zio_freezio
+ 
++define Device/zte_e8820s
++  $(Device/uimage-lzma-loader)
++  DEVICE_VENDOR := ZTE
++  DEVICE_MODEL := E8820S
++  BLOCKSIZE := 128k
++  PAGESIZE := 2048
++  KERNEL_SIZE := 4096k
++  UBINIZE_OPTS := -E 5
++  IMAGE_SIZE := 129280k
++  IMAGES += factory.bin
++  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
++  IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-ubi | \
++	check-size
++  DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb3 \
++	luci-app-mtwifi
++endef
++TARGET_DEVICES += zte_e8820s
++
+ define Device/zyxel_nr7101
+   $(Device/dsa-migration)
+   BLOCKSIZE := 128k
+diff --git a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
+index f9ac35a..2f9bf74 100755
+--- a/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
++++ b/target/linux/ramips/mt7621/base-files/etc/board.d/01_leds
+@@ -161,6 +161,9 @@ zbtlink,zbt-wg1608-16m)
+ 	ucidef_set_led_netdev "lan4" "LAN4" "green:lan-4" "lan4"
+ 	ucidef_set_led_netdev "wan" "WAN" "green:wan" "wan"
+ 	;;
++zte,e8820s)
++	ucidef_set_led_switch "internet" "internet" "white:sys" "switch0" "0x10"
++	;;
+ esac
+ 
+ board_config_flush
+diff --git a/target/linux/ramips/mt7621/base-files/etc/board.d/02_network b/target/linux/ramips/mt7621/base-files/etc/board.d/02_network
+index 341c0d4..a0197b4 100755
+--- a/target/linux/ramips/mt7621/base-files/etc/board.d/02_network
++++ b/target/linux/ramips/mt7621/base-files/etc/board.d/02_network
+@@ -98,9 +98,9 @@ ramips_setup_interfaces()
+ 		ucidef_set_interface "qtn" ifname "eth1" protocol "static" ipaddr "1.1.1.1" netmask "255.255.255.0"
+ 		;;
+ 	d-team,newifi-d2)
+-		ucidef_set_interfaces_lan_wan "eth0.1 ra0 rai0" "eth0.2"
++		ucidef_set_interfaces_lan_wan "eth0 ra0 rai0" "eth1"
+ 		ucidef_add_switch "switch0" \
+-			"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4:wan:5" "6@eth0"
++			"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4:wan:5" "6u@eth0" "5u@eth1"
+ 		;;
+ 	gehua,ghl-r-001)
+ 		ucidef_set_interfaces_lan_wan "eth0.1 ra0 rai0" "eth0.2"
+@@ -168,6 +168,11 @@ ramips_setup_interfaces()
+ 		ucidef_add_switch "switch0" \
+ 			"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6u@eth0" "5u@eth1"
+ 		;;
++	zte,e8820s)
++		ucidef_set_interfaces_lan_wan "eth0 ra0 rai0" "eth1"
++		ucidef_add_switch "switch0" \
++			"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6u@eth0" "5u@eth1"
++		;;
+ 	xwrt,t-cpe1201k-v01)
+ 		ucidef_add_switch "switch0" \
+ 			"0:wan" "1:lan" "2:lan" "6@eth0"
+diff --git a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
+index 407611a..8850328 100755
+--- a/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
++++ b/target/linux/ramips/mt7621/base-files/lib/upgrade/platform.sh
+@@ -92,6 +92,7 @@ platform_do_upgrade() {
+ 	xiaomi,mi-router-cr6606|\
+ 	xiaomi,mi-router-cr6608|\
+ 	xiaomi,mi-router-cr6609|\
++	zte,e8820s|\
+ 	xiaomi,redmi-router-ac2100)
+ 		nand_do_upgrade "$1"
+ 		;;
+-- 
+2.40.1
+

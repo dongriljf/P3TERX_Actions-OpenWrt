@@ -64,7 +64,7 @@ jobs:
         \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
         cd openwrt
         git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
-
+        
     - name: Update feeds
       run:  |
         cd openwrt && ./scripts/feeds update -a

@@ -59,11 +59,11 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-    - name: Load custom feeds
-      run: |
-        \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
-        cd openwrt
-        git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
+#    - name: Load custom feeds
+#      run: |
+#        \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
+#        cd openwrt
+#        git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
         
     - name: Update feeds
       run:  |

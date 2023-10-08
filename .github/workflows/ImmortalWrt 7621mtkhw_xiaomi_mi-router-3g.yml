@@ -23,7 +23,7 @@ env:
   REPO_URL: https://github.com/padavanonly/immortalwrt
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: 7620mtkhw_Xiaomi_Router_3G
+  CONFIG_FILE: 7621mtkhw_Xiaomi_Router_3G
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
@@ -59,11 +59,11 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-    - name: Load custom feeds
-      run: |
-        \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
-        cd openwrt
-        git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
+#    - name: Load custom feeds
+#      run: |
+#        \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
+#        cd openwrt
+#        git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
 
 
     - name: Update feeds

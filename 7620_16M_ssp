@@ -3,9 +3,9 @@ CONFIG_TARGET_ramips_mt7620=y
 CONFIG_TARGET_ramips_mt7620_DEVICE_lenovo_newifi-y1=y
 
 CONFIG_PACKAGE_ipv6helper=y
-##CONFIG_PACKAGE_tailscale=y
-##CONFIG_PACKAGE_tailscaled=y
-##CONFIG_PACKAGE_luci-app-cifs-mount=y
+CONFIG_PACKAGE_tailscale=y
+CONFIG_PACKAGE_tailscaled=y
+###CONFIG_PACKAGE_luci-app-cifs-mount=y
 ###CONFIG_PACKAGE_luci-app-cifsd=y
 # CONFIG_PACKAGE_luci-app-samba4 is not set
 

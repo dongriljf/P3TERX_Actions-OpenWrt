@@ -63,6 +63,7 @@ jobs:
       run: |
         \cp -f 0001-ZTE-E8820S-and-Newifi-D2-modification.patch openwrt/0001-ZTE-E8820S-and-Newifi-D2-modification.patch
         cd openwrt
+        git reset c09d479396d153944ddb58392d76620f91076d46
         git apply 0001-ZTE-E8820S-and-Newifi-D2-modification.patch
 
 

@@ -15,8 +15,6 @@ CONFIG_PACKAGE_hostapd-basic-openssl=y
 CONFIG_PACKAGE_hostapd-common=y
 CONFIG_PACKAGE_wpa-supplicant-openssl=y
 
-CONFIG_PACKAGE_tailscale=y
-CONFIG_PACKAGE_tailscaled=y
 
 CONFIG_ZSTD_OPTIMIZE_O3=y
 # CONFIG_PACKAGE_luci-app-mtwifi is not set

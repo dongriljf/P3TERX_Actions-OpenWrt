@@ -41,8 +41,7 @@ echo "CONFIG_PACKAGE_ath11k-firmware-qcn9074=y" >> ./.config
 echo "CONFIG_PACKAGE_luci-app-argon-config=y" >> ./.config
 
 #预置OpenClash内核和数据
-./wrt/package/
-
+cd ./smpackage
 if [ -d *"openclash"* ]; then
 	CORE_VER="https://raw.githubusercontent.com/vernesong/OpenClash/core/dev/core_version"
 	CORE_TYPE=$(echo $WRT_TARGET | grep -Eiq "64|86" && echo "amd64" || echo "arm64")

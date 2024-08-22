@@ -21,7 +21,7 @@ env:
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: 7621mtkhw_newifi_d2
-  DIY_P1_SH: diy-part1.sh
+  DIY_P1_SH: diy_7621_hwsdk.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
@@ -63,17 +63,7 @@ jobs:
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
         chmod +x $DIY_P1_SH
         cd openwrt
-        echo 'src-git kenzo https://github.com/kenzok8/openwrt-packages' >>feeds.conf.default
-        echo 'src-git small https://github.com/kenzok8/small' >>feeds.conf.default
-        sed -i 's/luci-theme-bootstrap/luci-theme-argone/g' feeds/luci/collections/luci/Makefile
-        git clone https://github.com/zzsj0928/luci-app-pushbot package/luci-app-pushbot
         $GITHUB_WORKSPACE/$DIY_P1_SH
-
-    - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a
-
-    - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
 
     - name: Load custom configuration
       run: |
